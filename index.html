@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Smith Lab Meeting · Nov 10</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one 16:9 stage (1280×720 design units) scaled to fit; slides swap in place, nav bar below. */
+:root{
+  --bg:#EEF1F5; --stage:#FAFBFC; --surface:#FFFFFF; --ink:#172033; --ink2:#46526A; --muted:#6F7A8E; --line:#D9DFE8;
+  --accept:#2F6FD1; --accept-soft:#D8E5FA; --reject:#B4BCC8; --viol:#D9711A; --viol-soft:#FBE6D3; --accent:#2F6FD1;
+  --figcard:#FFFFFF;
+  --f-display:'Schibsted Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  --f-text:'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --f-mono:'JetBrains Mono', 'Courier New', monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0B111C; --stage:#121A28; --surface:#1A2435; --ink:#E7ECF4; --ink2:#B5BFCF; --muted:#8C97AA; --line:#2B3649;
+  --accept:#6FA2F2; --accept-soft:#21365A; --reject:#5E6879; --viol:#F29A4A; --viol-soft:#4A3220; --accent:#6FA2F2;
+  --figcard:#F3F5F8; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0B111C; --stage:#121A28; --surface:#1A2435; --ink:#E7ECF4; --ink2:#B5BFCF; --muted:#8C97AA; --line:#2B3649;
+  --accept:#6FA2F2; --accept-soft:#21365A; --reject:#5E6879; --viol:#F29A4A; --viol-soft:#4A3220; --accent:#6FA2F2;
+  --figcard:#F3F5F8; color-scheme:dark}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-text);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:12px;box-sizing:border-box;overflow-x:hidden}
+.viewport{position:relative;width:min(100%, calc((100vh - 84px) * 16 / 9));aspect-ratio:16/9;max-width:100%;border-radius:10px;overflow:hidden;box-shadow:0 10px 40px rgba(15,25,45,.14);background:var(--stage)}
+.stage{position:absolute;left:0;top:0;width:1280px;height:720px;transform-origin:0 0}
+.slide{position:absolute;inset:0;padding:48px 64px 52px;box-sizing:border-box;display:flex;flex-direction:column;gap:20px;background:var(--stage);opacity:0;visibility:hidden;transition:opacity .35s ease, visibility .35s}
+.slide.active{opacity:1;visibility:visible}
+.eyebrow{font:600 13px/1 var(--f-text);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;color:var(--ink)}
+h1{font-size:54px;line-height:1.05;font-weight:700;letter-spacing:-.01em}
+h2{font-size:36px;line-height:1.12;font-weight:700;letter-spacing:-.005em}
+h3{font-size:21px;line-height:1.25;font-weight:600}
+p{margin:0;font-size:19px;line-height:1.45;color:var(--ink2)}
+.small{font-size:15px;line-height:1.45;color:var(--muted)}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.row{display:flex;gap:24px;min-height:0}
+.col{display:flex;flex-direction:column;gap:12px;min-width:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.tag{display:inline-block;align-self:flex-start;font:600 12px/1 var(--f-text);letter-spacing:.08em;text-transform:uppercase;padding:6px 9px;border-radius:999px;background:var(--accept-soft);color:var(--ink)}
+.tag.o{background:var(--viol-soft)}
+.foot{position:absolute;left:64px;right:64px;bottom:18px;display:flex;justify-content:space-between;font:500 12px/1 var(--f-text);color:var(--muted);letter-spacing:.04em}
+.figcard{background:var(--figcard);border-radius:10px;border:1px solid var(--line);padding:10px;display:flex;align-items:center;justify-content:center;min-height:0}
+.figcard img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+.cite{font-size:13px;color:var(--muted);line-height:1.4}
+.key{font-family:var(--f-display);font-weight:600;font-size:24px;line-height:1.3;color:var(--ink)}
+.key em{font-style:normal;color:var(--viol)}
+.pill-btn{font:600 13px/1 var(--f-text);padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.pill-btn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--stage)}
+.pill-btn:focus-visible,.navbtn:focus-visible,.bubble:focus-visible{outline:3px solid var(--viol);outline-offset:2px}
+.section-band{display:flex;gap:6px;position:absolute;top:22px;right:64px}
+.section-band span{font:600 11px/1 var(--f-text);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:5px 8px;border-radius:999px;border:1px solid var(--line)}
+.section-band span.on{color:var(--stage);background:var(--ink);border-color:var(--ink)}
+.nav{display:flex;align-items:center;gap:12px;width:min(100%, calc((100vh - 84px) * 16 / 9));max-width:100%}
+.navbtn{font:600 14px/1 var(--f-text);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 14px;cursor:pointer}
+.progress{flex:1;height:4px;background:var(--line);border-radius:4px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.count{font:500 13px/1 var(--f-mono);color:var(--muted);min-width:56px;text-align:right}
+.title-slide{justify-content:center;gap:22px}
+.title-grid{position:absolute;right:56px;top:130px;width:400px;height:400px}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.slide.active .anim{animation:rise .6s ease both}
+.slide.active .anim.d1{animation-delay:.15s}.slide.active .anim.d2{animation-delay:.3s}.slide.active .anim.d3{animation-delay:.45s}.slide.active .anim.d4{animation-delay:.6s}.slide.active .anim.d5{animation-delay:.75s}
+@media (prefers-reduced-motion: reduce){.slide.active .anim{animation:none}.slide{transition:none}}
+/* trial screen mock: a dark task display in both themes */
+.screen{background:#141A24;border-radius:12px;border:6px solid #2A3240;color:#F1F4F8;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.screen .fix{font:600 44px/1 var(--f-mono);color:#C9D2DE}
+.screen .gam{display:flex;gap:26px;align-items:center;font-family:var(--f-display)}
+.screen .gam div{display:flex;flex-direction:column;align-items:center;gap:6px}
+.screen .gam b{font-size:44px}
+.screen .gam small{font:500 14px/1 var(--f-text);color:#AAB4C3;letter-spacing:.06em;text-transform:uppercase}
+.resp{display:flex;gap:8px;position:absolute;bottom:16px;left:0;right:0;justify-content:center}
+.resp span{font:600 12px/1 var(--f-text);padding:7px 9px;border-radius:6px;background:#263042;color:#C9D2DE;transition:background .2s,color .2s}
+.resp span.hit{background:#6FA2F2;color:#0E1420}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--ink2);align-items:center}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-2px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.stat b{font:600 30px/1 var(--f-mono);color:var(--ink)}
+.stat span{font-size:13px;color:var(--muted);line-height:1.3}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--stage);font:500 13px/1.35 var(--f-text);padding:7px 9px;border-radius:6px;opacity:0;transition:opacity .12s;white-space:nowrap;z-index:5}
+/* fact vs belief */
+.event{background:var(--ink);color:var(--stage);border-radius:12px;padding:16px 20px;display:flex;flex-direction:column;gap:6px}
+.event h3{color:var(--stage)}
+.event .small{color:var(--reject)}
+.bubble{background:var(--surface);border:1.5px solid var(--line);border-radius:16px 16px 16px 4px;padding:10px 16px;display:flex;flex-direction:column;gap:7px;cursor:pointer;text-align:left;font:inherit;color:inherit;transition:border-color .2s, transform .2s}
+.bubble:hover{transform:translateY(-2px)}
+.bubble .who{font:600 12px/1 var(--f-text);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.bubble .said{font-size:16.5px;line-height:1.5;color:var(--ink)}
+.fact{background:var(--accept-soft);border-radius:4px;padding:1px 4px}
+.belief{border-bottom:2.5px solid var(--viol);padding-bottom:1px}
+.meter{display:flex;gap:4px;align-items:center;font-size:12px;color:var(--muted)}
+.meter i{width:16px;height:7px;border-radius:2px;background:var(--line)}
+.meter i.f{background:var(--viol)}
+.verdict{font:600 13px/1.2 var(--f-text);padding:6px 9px;border-radius:6px;align-self:flex-start;opacity:0;transition:opacity .3s}
+.revealed .verdict{opacity:1}
+.ok{background:var(--accept-soft);color:var(--ink)}.bad{background:var(--viol-soft);color:var(--ink)}
+.chip{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.chip b{font-family:var(--f-display);font-size:19px;color:var(--ink);display:block;margin-bottom:3px}
+.chip span{font-size:15px;color:var(--ink2);line-height:1.4}
+.dot{flex:none;width:12px;height:12px;border-radius:50%;margin-top:6px}
+</style>
+
+<div class="viewport" id="vp"><div class="stage" id="stage">
+
+<!-- 1 TITLE -->
+<section class="slide title-slide" data-sec="">
+  <div class="eyebrow anim">Smith Lab Meeting · Tuesday, November 10, 2026</div>
+  <h1 class="anim d1" style="max-width:700px">Choice inconsistency, from NARPS to our new replication</h1>
+  <p class="anim d2" style="max-width:600px">MA project · NARPS method and findings · the lab’s new stake study · what I would add</p>
+  <p class="anim d3" style="font:600 20px/1 var(--f-display);color:var(--ink)">Yaqi Hu</p>
+  <svg class="title-grid" id="titleGrid" viewBox="0 0 400 400" aria-label="Gain by loss grid of gambles, colored by accept or reject, with two inconsistent choices ringed"></svg>
+</section>
+
+<!-- 2 MA: fact vs belief -->
+<section class="slide" data-sec="A">
+  <div class="eyebrow">A · MA project · the problem</div>
+  <h2 class="anim">Same event, different beliefs</h2>
+  <div class="row anim d1" style="flex:1;align-items:stretch;gap:20px">
+    <div class="col" style="flex:0 0 300px;gap:14px">
+      <div class="event"><span class="small" style="letter-spacing:.08em;text-transform:uppercase;font-weight:600">What happened</span><h3>A magic trick predicted the object each person secretly chose.</h3></div>
+      <button class="pill-btn" id="revealBtn" aria-pressed="false" style="align-self:flex-start">Reveal how it worked</button>
+      <div class="card" id="truth" style="opacity:.35;transition:opacity .3s"><span class="tag o">Hidden mechanism</span><p style="font-size:17px">Webcam eye-tracking</p></div>
+      <div class="legend" style="margin-top:auto"><span><span class="fact">fact</span>&nbsp;what they did and saw</span><span><span class="belief">belief</span>&nbsp;what they inferred</span></div>
+    </div>
+    <div class="col" id="bubbles" style="flex:1;gap:12px">
+      <button class="bubble anim d2"><span class="who">Person A</span><span class="said"><span class="fact">A pop-up window asked for access. I clicked the choice button.</span> <span class="fact">It knows my choice.</span> <span class="belief">I think it watched where I looked,</span> but I’m not sure.</span><span class="meter">confidence <i class="f"></i><i class="f"></i><i></i><i></i></span><span class="verdict ok">correct, and knows the limits of what they know</span></button>
+      <button class="bubble anim d3"><span class="who">Person B</span><span class="said"><span class="fact">I clicked the choice button.</span> <span class="fact">It knows my choice.</span> <span class="belief">It was obviously a lucky guess.</span></span><span class="meter">confidence <i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i></span><span class="verdict bad">wrong, and confident</span></button>
+      <button class="bubble anim d4"><span class="who">Person C</span><span class="said"><span class="fact">There was a pop-up window asking for access, then I clicked my choice.</span> <span class="fact">It knows my choice.</span> <span class="belief">I have no idea how. It felt impossible.</span></span><span class="meter">impossibility <i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i></span><span class="verdict ok">no explanation, but marks exactly where their knowledge stops</span></button>
+    </div>
+  </div>
+  <p class="key anim d5">Similar facts. What differs is <em>how much each person knows</em> about the cause.</p>
+</section>
+
+<!-- 3 MA: why for LLMs -->
+<section class="slide" data-sec="A">
+  <div class="eyebrow">A · MA project · central question</div>
+  <h2 class="anim" style="font-size:34px;max-width:1080px">How do LLMs recognize and use people’s uncertainty when interpreting their explanations?</h2>
+  <div class="row anim d1" style="flex:1;align-items:stretch;gap:22px">
+    <div class="col" style="flex:1.15">
+      <svg id="llmsvg" viewBox="0 0 620 330" style="width:100%;height:auto" aria-label="Pipeline: human accounts go to an LLM; RQ1 compares estimated states with self-reports; RQ2 compares mechanism answers with and without self-reports"></svg>
+    </div>
+    <div class="col" style="flex:1;gap:10px">
+      <div class="small" style="font-weight:600;letter-spacing:.08em;text-transform:uppercase">What epistemic states carry</div>
+      <div class="chip"><span class="dot" style="background:var(--accept)"></span><div><b>Confidence</b><span>how much weight a claim deserves</span></div></div>
+      <div class="chip"><span class="dot" style="background:var(--viol)"></span><div><b>Perceived impossibility</b><span>where an expectation broke, which points toward the hidden cause</span></div></div>
+      <div class="chip"><span class="dot" style="background:var(--ink)"></span><div><b>Knowledge gaps</b><span>where the evidence stops, so the reader knows what not to fill in</span></div></div>
+      <p class="small" style="margin-top:auto"><b style="color:var(--ink)">Advice wanted:</b> which other states are worth measuring, and how to measure people’s awareness of what they don’t know.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 4 NARPS problem -->
+<section class="slide" data-sec="B">
+  <div class="eyebrow">B · NARPS · Rethinking behavioral drift</div>
+  <h2 class="anim">Do choices drift within a session, without assuming a model?</h2>
+  <div class="row anim d1" style="flex:1;align-items:stretch;gap:28px">
+    <div class="col" style="flex:1">
+      <div class="screen" id="trialScreen" style="flex:1" aria-label="Animated mixed-gambles trial"></div>
+      <p class="small" style="text-align:center">NARPS mixed gambles · 108 people × 4 runs × 64 trials · 4-point accept/reject</p>
+    </div>
+    <div class="col" style="flex:0 0 430px;justify-content:center;gap:18px">
+      <div class="card"><span class="tag o">Usual approach</span><p>Fit λ per run and watch it change</p><p class="small">The result depends on the model and on which gambles appear when.</p></div>
+      <div class="card" style="border-color:var(--accent)"><span class="tag">Our tool</span><p>Assume only <b>dominance</b>: more gain or less loss is never worse</p><p class="small">Read inconsistency directly from the choices, trial by trial.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 Method: flip lab + paper figures -->
+<section class="slide" data-sec="B">
+  <div class="eyebrow">B · Method · decision boundary and flips</div>
+  <h2 class="anim">A flip: rejecting a gamble that dominates one you accepted</h2>
+  <div class="row anim d1" style="flex:1;align-items:stretch;gap:26px">
+    <div class="col" style="flex:0 0 520px;gap:10px">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <span class="small" style="font-weight:600">Try it: click cells</span>
+        <button class="pill-btn" id="btnEx">Example</button>
+        <button class="pill-btn" id="btnClean">Consistent</button>
+        <button class="pill-btn" id="btnLapse">+ lapse</button>
+        <button class="pill-btn" id="btnLines" aria-pressed="false">All flip pairs</button>
+      </div>
+      <svg id="flipsvg" viewBox="0 0 470 445" style="width:100%;height:auto;max-height:440px" aria-label="Interactive gain by loss grid; click cells to toggle choices"></svg>
+    </div>
+    <div class="col" style="flex:1;gap:12px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="stat"><b id="stFlips">0</b><span>flip pairs</span></div>
+        <div class="stat" style="border-color:var(--viol)"><b id="stNu">0</b><span>matched pairs ν = fewest reversals to make it consistent</span></div>
+      </div>
+      <div class="legend"><span><i style="background:var(--accept)"></i>accept</span><span><i style="background:var(--reject)"></i>reject</span><span><i style="border:2.5px solid var(--viol);border-radius:50%"></i>violation</span><span><i style="background:var(--ink);height:3px"></i>boundary</span></div>
+      <div style="display:flex;gap:8px" role="group" aria-label="Paper figure">
+        <button class="pill-btn" data-fig="b" aria-pressed="true">Two real participants</button>
+        <button class="pill-btn" data-fig="f" aria-pressed="false">One lapse, worked through</button>
+      </div>
+      <div class="figcard" style="flex:1"><img id="paperFig" src="figs/fig_boundary.png" alt="Paper figure: decision boundaries for a consistent and an inconsistent NARPS participant"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 LCLT: task + fit -->
+<section class="slide" data-sec="B">
+  <div class="eyebrow">B · Method · a behavioral dataset to generalize to</div>
+  <h2 class="anim">Linked Colored Lottery Task: one dimension instead of two</h2>
+  <div class="row anim d1" style="flex:1;align-items:stretch;gap:24px">
+    <div class="col" style="flex:1">
+      <svg id="lcltsvg" viewBox="0 0 560 300" style="width:100%;height:auto" aria-label="Animated lottery versus sure-amount trial and three color blocks"></svg>
+      <p class="cite">Wyngaarden, Yang, Dennison &amp; Smith (2025), <i>Data in Brief</i> 61:111844 · Exp 1 in person n = 46 ($13 lottery vs $7 sure) · Exp 2 online n = 287 ($7 vs $3)</p>
+    </div>
+    <div class="col" style="flex:1;gap:14px">
+      <svg id="mapsvg" viewBox="0 0 560 330" style="width:100%;height:auto" aria-label="Mapping: in NARPS, more gain and less loss dominates; in the lottery task, higher win probability dominates; a flip on the probability line"></svg>
+    </div>
+  </div>
+  <p class="key anim d2">Higher win probability always dominates, so <em>accept at 30% but reject at 60%</em> is a flip. The method transfers unchanged.</p>
+</section>
+
+<!-- 8 Transient -->
+<section class="slide" data-sec="B">
+  <div class="eyebrow">B · Results · NARPS behavior</div>
+  <h2 class="anim">The drift is a one-time opening transient</h2>
+  <div class="figcard anim d1" style="flex:1"><img src="figs/transient.png" alt="Paper figure: session profile of flip scores, high in the first half of run 1 and flat afterwards"></div>
+  <div class="row anim d2" style="gap:16px">
+    <div class="card" style="flex:1"><p style="color:var(--ink)">Concentrated in the <b>first ~25 trials</b> of run 1</p></div>
+    <div class="card" style="flex:1"><p style="color:var(--ink)">Mostly <b>permissive</b>: accepting gambles one’s own boundary rejects</p></div>
+    <div class="card" style="flex:1"><p style="color:var(--ink)">Runs 2–4: <b>no trend</b></p></div>
+  </div>
+</section>
+
+<!-- 9 Replication -->
+<section class="slide" data-sec="B">
+  <div class="eyebrow">B · Results · replication</div>
+  <h2 class="anim">The same signature across datasets</h2>
+  <div class="row anim d1" style="flex:1;align-items:stretch;gap:24px">
+    <div class="figcard" style="flex:1.6"><img src="figs/cross_dataset_forest.png" alt="Paper figure: forest plot of trend and onset transient across six risky-choice datasets with pooled estimates"></div>
+    <div class="col" style="flex:1;justify-content:center;gap:14px">
+      <div class="stat"><b>6</b><span>lab risky-choice datasets, pooled</span></div>
+      <div class="stat"><b>47,000</b><span>smartphone participants also show it</span></div>
+      <div class="stat"><b>null</b><span>in the delay-discounting control</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Quick check -->
+<section class="slide" data-sec="B">
+  <div class="eyebrow">B · Results · a first look at the lottery data (run and audited today)</div>
+  <h2 class="anim">The lottery task shows the same one-time opening</h2>
+  <div class="row anim d1" style="flex:1;align-items:stretch;gap:26px">
+    <div class="col" style="flex:1.35;gap:8px">
+      <div style="position:relative">
+        <svg id="qc" viewBox="0 0 700 400" style="width:100%;height:auto" aria-label="Two line charts, in person and online: share of choices that contradict the person's own boundary by trial position, for the first color block and for later blocks, with the gap shaded"></svg>
+        <div class="tip" id="qcTip"></div>
+      </div>
+      <div class="legend"><span><i style="background:var(--viol);height:4px;width:20px"></i>first color block (± s.e.)</span><span><i style="background:var(--accept);height:3px;width:20px"></i>blocks 2–3</span><span><i style="background:var(--viol);opacity:.28"></i>opening excess</span></div>
+    </div>
+    <div class="col" style="flex:1;gap:10px;justify-content:center">
+      <div class="card"><span class="tag o">1 · Opening</span><p style="font-size:18px;color:var(--ink)">The first 10 choices contradict the person’s <b>own boundary</b> more often than the next 10.</p><p class="small">First block, first 10 vs next 10: in person 14% → 5% (P = .0002), online 9% → 6% (P = .0006).</p></div>
+      <div class="card"><span class="tag">2 · One time only</span><p style="font-size:18px;color:var(--ink)">Later blocks stay flat. A new color does <b>not</b> reliably restart it.</p></div>
+      <div class="card"><span class="tag">3 · Survives the audit</span><p style="font-size:18px;color:var(--ink)">Same result with gamble content held fixed, a held-out boundary, and a static-chooser replay.</p></div>
+      <p class="cite">Caveats: online the effect is small and not specifically permissive. About 1 in 6 people miss the very first trial, so part of the opening may be getting used to the task. Matched flip score not run yet.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 10 Putamen -->
+<section class="slide" data-sec="B">
+  <div class="eyebrow">B · Results · neural</div>
+  <h2 class="anim">Dorsal putamen tracks flips, while vmPFC tracks value</h2>
+  <div class="figcard anim d1" style="flex:1"><img src="figs/fig_neural.png" alt="Paper figure: putamen flip-pair differences, robustness across pair constructions, and vmPFC held-out effects"></div>
+  <div class="row anim d2" style="gap:16px">
+    <p class="small" style="flex:1"><b style="color:var(--ink)">a</b> · One dot per person: putamen response at the accepted minus the rejected gamble of a pair. Flip pairs fall below zero; consistent pairs sit on zero.</p>
+    <p class="small" style="flex:1"><b style="color:var(--ink)">b</b> · The same effect measured nine ways. Left of the dashed line = effect present. Filled dot = significant.</p>
+    <p class="small" style="flex:1"><b style="color:var(--ink)">c</b> · vmPFC: no flip effect (grey, on zero), but a clear value effect (blue).</p>
+  </div>
+  <div class="row anim d2" style="gap:16px;align-items:stretch">
+    <div class="stat" style="flex:1"><b>−0.082</b><span>putamen, flip vs value-matched pairs, time and motor corrected (P = .025, n = 101)</span></div>
+    <div class="card" style="flex:1.4;border-color:var(--viol)"><span class="tag o">Open question</span><p style="color:var(--ink)">Do people adjust their choices as they become <b>certain about the gamble environment</b>?</p></div>
+  </div>
+</section>
+
+<!-- 11 C: what's missing -->
+<section class="slide" data-sec="C">
+  <div class="eyebrow">C · New Smith-lab replication · why</div>
+  <h2 class="anim">Three things Tom (2007) and NARPS held fixed</h2>
+  <div class="row anim d1" style="flex:1;align-items:stretch;gap:26px">
+    <div class="col" style="flex:1;gap:12px;justify-content:center">
+      <div class="chip"><span class="dot" style="background:var(--accent)"></span><div><b>Stake magnitude</b><span>Risk attitudes shift with stakes; loss aversion adapts to the range on offer.</span><div class="cite">Holt &amp; Laury 2002 · Walasek &amp; Stewart 2015 · Brochard &amp; Daunizeau 2024</div></div></div>
+      <div class="chip"><span class="dot" style="background:var(--ink)"></span><div><b>Reliability and trial count</b><span>Reward BOLD test-retest reliability is low and rises with trials.</span><div class="cite">Elliott et al. 2020 · Mattoni et al. 2026 (our lab)</div></div></div>
+      <div class="chip"><span class="dot" style="background:var(--viol)"></span><div><b>Compensation context</b><span>A large guaranteed payment may dull the salience of task money.</span><div class="cite">Show-up-fee framing studies; little direct fMRI evidence</div></div></div>
+    </div>
+    <div class="col" style="flex:1;gap:8px">
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap" role="group" aria-label="Stake environment">
+        <span class="small" style="font-weight:600">Stakes:</span>
+        <button class="pill-btn" data-stake="0" aria-pressed="true">Low</button>
+        <button class="pill-btn" data-stake="1" aria-pressed="false">Medium</button>
+        <button class="pill-btn" data-stake="2" aria-pressed="false">High</button>
+      </div>
+      <svg id="stakesvg" viewBox="0 0 520 420" style="width:100%;height:400px" aria-label="16 by 16 equal-indifference gain-loss grid whose dollar labels rescale with stake environment"></svg>
+      <p class="small">Same 16 × 16 geometry. Only the dollar scale changes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 12 C: design -->
+<section class="slide" data-sec="C">
+  <div class="eyebrow">C · New Smith-lab replication · design (IRB v1.0)</div>
+  <h2 class="anim">50 people · 2 visits · 6 runs of 64 gambles each</h2>
+  <div class="anim d1" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap" role="group" aria-label="Compensation group">
+    <span class="small" style="font-weight:600">Randomized 1:1:</span>
+    <button class="pill-btn" data-comp="task" aria-pressed="true">Task-pay context</button>
+    <button class="pill-btn" data-comp="fixed" aria-pressed="false">Fixed-pay context</button>
+  </div>
+  <svg id="designsvg" class="anim d2" viewBox="0 0 1150 260" style="width:100%;height:auto" aria-label="Two visits each with six 64-trial runs across low, medium and high stake environments"></svg>
+  <div class="row anim d3" style="gap:16px;align-items:stretch">
+    <div class="card" style="flex:1"><span class="tag">3 stake levels → H1</span><p style="font-size:17px;color:var(--ink)">Bigger stakes → a <b>larger ventral-striatum gain response</b>, possibly levelling off at high stakes.</p></div>
+    <div class="card" style="flex:1"><span class="tag">2 visits × 128 trials per level → H2</span><p style="font-size:17px;color:var(--ink)">More trials → <b>better reliability and precision</b>, with diminishing returns.</p><p class="small">Visit 2 repeats the <b>same gambles</b> in a new order, so test-retest compares identical items.</p></div>
+    <div class="card" style="flex:1"><span class="tag o">2 pay contexts → H3 (secondary)</span><p style="font-size:17px;color:var(--ink)">A known fixed payment → <b>weaker, less reliable</b> sensitivity to task stakes.</p></div>
+  </div>
+</section>
+
+<!-- 13 D: inspiration -> tests -->
+<section class="slide" data-sec="D">
+  <div class="eyebrow">D · My expanded research · from NARPS to new tests</div>
+  <h2 class="anim">What NARPS raised, and how the new study can test it</h2>
+  <svg id="inspsvg" class="anim d1" viewBox="0 0 1150 470" style="width:100%;height:auto" aria-label="Diagram linking three NARPS observations to hypotheses and proposed tests"></svg>
+</section>
+
+<!-- 14 D: additions -->
+<section class="slide" data-sec="D">
+  <div class="eyebrow">D · My expanded research · proposed additions</div>
+  <h2 class="anim">Two additions to the task</h2>
+  <div class="row anim d1" style="flex:1;align-items:stretch;gap:26px">
+    <div class="col" style="flex:1;gap:12px">
+      <div class="card" style="border-color:var(--viol)"><span class="tag o">1 · Range preview + check</span><p style="color:var(--ink)">Before first exposure to <i>selected</i> stake environments: show the ranges, then quiz the limits.</p><p class="small">The other environments get matched standard prep. Counterbalanced; compared at first exposure in Visit 1.</p></div>
+      <svg id="previewsvg" viewBox="0 0 560 130" style="width:100%;height:auto" aria-label="Visit 1 timeline with range preview before selected environments"></svg>
+    </div>
+    <div class="col" style="flex:1;gap:12px">
+      <div class="card" style="border-color:var(--accent)"><span class="tag">2 · End-of-task review</span><p style="color:var(--ink)">After the whole task, show earlier gambles with the original answers: <b>keep or change?</b></p><p class="small">No outcomes are shown during the task, so any change reflects regret, not feedback.</p></div>
+      <div class="screen" id="reviewScreen" style="flex:1;min-height:250px;align-items:stretch;justify-content:flex-start;padding:16px 18px;flex-direction:column;gap:8px" aria-label="Animated review screen where some early answers are changed"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 15 D: predictions -->
+<section class="slide" data-sec="D">
+  <div class="eyebrow">D · My expanded research · predictions</div>
+  <h2 class="anim">If the opening is environment learning…</h2>
+  <div class="row anim d1" style="flex:1;align-items:stretch;gap:26px">
+    <div class="col" style="flex:1;gap:6px">
+      <h3>Range preview shortens the opening</h3>
+      <svg id="predsvg" viewBox="0 0 560 330" style="width:100%;height:auto" aria-label="Schematic: inconsistency over trials with and without range preview"></svg>
+      <p class="small">Prediction: a smaller early-vs-late putamen difference with preview.</p>
+    </div>
+    <div class="col" style="flex:1;gap:6px">
+      <h3>People revise their opening choices</h3>
+      <svg id="revsvg" viewBox="0 0 560 330" style="width:100%;height:auto" aria-label="Schematic: share of answers changed at review, by when the original choice was made"></svg>
+      <p class="small">Changes should move opening choices toward the person’s final boundary, including early choices that were not flips.</p>
+    </div>
+  </div>
+  <p class="cite anim d2">Schematic predictions, not data.</p>
+</section>
+
+</div></div>
+
+<nav class="nav" aria-label="Slide navigation">
+  <button class="navbtn" id="prev" aria-label="Previous slide">← Prev</button>
+  <div class="progress"><i id="prog"></i></div>
+  <span class="count" id="count">1 / 15</span>
+  <button class="navbtn" id="next" aria-label="Next slide">Next →</button>
+</nav>
+
+<script>
+(function(){
+const NS='http://www.w3.org/2000/svg';
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e}
+function txt(parent,x,y,s,attrs){const t=el('text',Object.assign({x,y,'font-family':"Inter, Arial, sans-serif",'font-size':13,fill:css('--ink2')},attrs||{}),parent);t.textContent=s;return t}
+function box(svg,x,y,w,h,fill,stroke,r){return el('rect',{x,y,width:w,height:h,rx:r||10,fill,stroke:stroke||'none','stroke-width':stroke?1.5:0},svg)}
+function arrow(svg,x1,y1,x2,y2,col){const id='ah'+Math.random().toString(36).slice(2,7);const d=el('defs',{},svg);const m=el('marker',{id,viewBox:'0 0 10 10',refX:9,refY:5,markerWidth:7,markerHeight:7,orient:'auto-start-reverse'},d);el('path',{d:'M0 0L10 5L0 10z',fill:col},m);
+  return el('line',{x1,y1,x2,y2,stroke:col,'stroke-width':2,'marker-end':'url(#'+id+')'},svg)}
+function drawIn(paths,delay){paths.forEach((p,i)=>{const len=p.getTotalLength();p.style.strokeDasharray=len;p.style.strokeDashoffset=len;p.getBoundingClientRect();p.style.transition='stroke-dashoffset 1s ease '+((delay||0)+i*.35)+'s';p.style.strokeDashoffset=0})}
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- deck mechanics ---------- */
+const slides=[...document.querySelectorAll('.slide')];
+const vp=document.getElementById('vp'),stage=document.getElementById('stage');
+const SECS={A:'MA project',B:'NARPS',C:'New replication',D:'My additions'};
+slides.forEach(s=>{const k=s.dataset.sec;if(!k||!SECS[k])return;const band=document.createElement('div');band.className='section-band';
+  for(const key in SECS){const sp=document.createElement('span');sp.textContent=SECS[key];if(key===k)sp.className='on';band.appendChild(sp)}s.appendChild(band)});
+slides.forEach((s,i)=>{const f=document.createElement('div');f.className='foot';f.innerHTML='<span>Yaqi Hu · Smith Lab · Nov 10, 2026</span><span>'+(i+1)+'</span>';s.appendChild(f)});
+function fit(){stage.style.transform='scale('+(vp.clientWidth/1280)+')'}
+addEventListener('resize',fit);fit();
+let cur=0;const hooks={},stops=[];
+function go(i){i=Math.max(0,Math.min(slides.length-1,i));slides[cur].classList.remove('active');cur=i;slides[cur].classList.add('active');
+  document.getElementById('count').textContent=(cur+1)+' / '+slides.length;
+  document.getElementById('prog').style.width=((cur+1)/slides.length*100)+'%';
+  if(location.hash!=='#slide-'+(cur+1))history.replaceState(null,'','#slide-'+(cur+1));
+  stops.forEach(f=>f());if(hooks[cur])hooks[cur]()}
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.getElementById('next').onclick=()=>go(cur+1);
+addEventListener('keydown',e=>{if(e.target.tagName==='BUTTON'&&(e.key===' '||e.key==='Enter'))return;if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(cur+1)}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}});
+function fromHash(){const m=location.hash.match(/^#slide-(\d+)$/);return m?parseInt(m[1],10)-1:0}
+addEventListener('hashchange',()=>{const i=fromHash();if(i!==cur)go(i)});
+
+function makeGrid(nG,nL,seed){let s=seed;const rnd=()=>{s=(s*16807)%2147483647;return s/2147483647};
+  const cells=[];for(let gi=0;gi<nG;gi++)for(let li=0;li<nL;li++){const g=10+gi*4,l=5+li*2;const u=g-1.9*l+(rnd()-.5)*3;cells.push({gi,li,g,l,acc:u>0})}return cells}
+
+/* ---------- title grid ---------- */
+(function(){const svg=document.getElementById('titleGrid');const cells=makeGrid(10,10,7);const sz=40;
+  cells.forEach(c=>{const r=el('rect',{x:c.li*sz+4,y:(9-c.gi)*sz+4,width:sz-8,height:sz-8,rx:6,fill:c.acc?css('--accept'):css('--reject'),opacity:c.acc?0.9:0.55},svg);
+    if(!reduce){r.style.opacity=0;r.style.transition='opacity .5s ease '+((c.gi+c.li)*0.04)+'s';requestAnimationFrame(()=>requestAnimationFrame(()=>r.style.opacity=c.acc?.9:.55))}});
+  [[2,7],[6,3]].forEach(([li,gi])=>el('circle',{cx:li*sz+20,cy:(9-gi)*sz+20,r:17,fill:'none',stroke:css('--viol'),'stroke-width':3.5},svg));
+})();
+
+/* ---------- fact vs belief ---------- */
+(function(){const btn=document.getElementById('revealBtn'),wrap=document.getElementById('bubbles'),truth=document.getElementById('truth');
+  function set(on){btn.setAttribute('aria-pressed',on);wrap.classList.toggle('revealed',on);truth.style.opacity=on?1:.35;btn.textContent=on?'Hide the mechanism':'Reveal how it worked'}
+  btn.onclick=()=>set(btn.getAttribute('aria-pressed')!=='true');
+  wrap.querySelectorAll('.bubble').forEach(b=>b.onclick=()=>set(true));
+  hooks[1]=()=>set(false);
+})();
+
+/* ---------- LLM pipeline ---------- */
+(function(){const svg=document.getElementById('llmsvg');
+ function draw(animate){svg.innerHTML='';const ink=css('--ink'),ink2=css('--ink2'),line=css('--line'),sur=css('--surface');
+  box(svg,0,40,150,96,sur,line);txt(svg,75,72,'Account',{'text-anchor':'middle',fill:ink,'font-size':16,'font-weight':600});txt(svg,75,94,'what happened +',{'text-anchor':'middle'});txt(svg,75,112,'how it worked',{'text-anchor':'middle'});
+  box(svg,0,196,150,96,css('--viol-soft'),null);txt(svg,75,228,'Self-report',{'text-anchor':'middle',fill:ink,'font-size':16,'font-weight':600});txt(svg,75,250,'confidence, gaps,',{'text-anchor':'middle'});txt(svg,75,268,'impossibility',{'text-anchor':'middle'});
+  box(svg,235,110,120,110,ink,null,14);txt(svg,295,172,'LLM',{'text-anchor':'middle',fill:css('--stage'),'font-size':24,'font-weight':700,'font-family':"'Schibsted Grotesk', Arial, sans-serif"});
+  const a1=arrow(svg,152,88,232,140,ink2);const a2=arrow(svg,152,244,232,192,css('--viol'));a2.setAttribute('stroke-dasharray','6 5');
+  txt(svg,192,300,'only in RQ2 (with)',{'text-anchor':'middle',fill:css('--viol'),'font-size':12,'font-weight':600});
+  box(svg,440,30,180,120,sur,css('--accent'));txt(svg,530,58,'RQ1 · recognize',{'text-anchor':'middle',fill:css('--accent'),'font-size':13,'font-weight':700});
+  txt(svg,530,84,'estimated states',{'text-anchor':'middle',fill:ink,'font-size':14});txt(svg,530,104,'vs.',{'text-anchor':'middle'});txt(svg,530,124,'self-reports',{'text-anchor':'middle',fill:ink,'font-size':14});
+  box(svg,440,180,180,130,sur,css('--viol'));txt(svg,530,208,'RQ2 · use',{'text-anchor':'middle',fill:css('--viol'),'font-size':13,'font-weight':700});
+  txt(svg,530,232,'mechanism answer',{'text-anchor':'middle',fill:ink,'font-size':14});txt(svg,530,252,'without vs. with',{'text-anchor':'middle'});txt(svg,530,272,'self-reports',{'text-anchor':'middle',fill:ink,'font-size':14});txt(svg,530,294,'scored vs. true mechanism',{'text-anchor':'middle','font-size':11,fill:css('--muted')});
+  const b1=arrow(svg,357,150,437,95,ink2),b2=arrow(svg,357,185,437,240,ink2);
+  if(animate&&!reduce)drawIn([a1,a2,b1,b2],.1)}
+ draw(false);hooks[2]=()=>draw(true);
+})();
+
+/* ---------- trial screen ---------- */
+(function(){const screen=document.getElementById('trialScreen');const gambles=[[24,12],[36,8],[14,13],[30,19],[20,6]];let k=0,t=null;
+  function frame(){const [g,l]=gambles[k%gambles.length];k++;screen.innerHTML='<div class="fix">+</div>';
+    t=setTimeout(()=>{screen.innerHTML='<div class="gam"><div><small>50% win</small><b style="color:#7FB0F7">+$'+g+'</b></div><div style="font:600 22px/1 var(--f-text);color:#5D6878">or</div><div><small>50% lose</small><b style="color:#F2A46A">−$'+l+'</b></div></div><div class="resp"><span>strongly accept</span><span>weakly accept</span><span>weakly reject</span><span>strongly reject</span></div>';
+      const u=g-2*l;const idx=u>12?0:u>0?1:u>-6?2:3;
+      t=setTimeout(()=>{screen.querySelectorAll('.resp span')[idx].classList.add('hit');t=setTimeout(frame,1100)},1300)},700)}
+  stops.push(()=>clearTimeout(t));hooks[3]=()=>{k=0;frame()};
+  screen.innerHTML='<div class="gam"><div><small>50% win</small><b style="color:#7FB0F7">+$24</b></div><div style="font:600 22px/1 var(--f-text);color:#5D6878">or</div><div><small>50% lose</small><b style="color:#F2A46A">−$12</b></div></div>';
+})();
+
+/* ---------- flip lab ---------- */
+(function(){const svg=document.getElementById('flipsvg');const nG=8,nL=8,sz=47,ox=58,oy=6;let state,showLines=false,hover=null;
+ const consistent=()=>{const c=makeGrid(nG,nL,11);c.forEach(x=>x.acc=(x.g-2*x.l)>-1);return c};
+ const example=()=>{const c=consistent();[[6,2],[2,5],[1,4]].forEach(([gi,li])=>{const x=c.find(x=>x.gi===gi&&x.li===li);x.acc=!x.acc});return c};
+ const X=li=>ox+li*sz,Y=gi=>oy+(nG-1-gi)*sz;
+ const dom=(a,b)=>a.gi>=b.gi&&a.li<=b.li&&(a.gi!==b.gi||a.li!==b.li);
+ function analyze(cells){const R=cells.filter(c=>!c.acc),A=cells.filter(c=>c.acc),pairs=[];
+   R.forEach(r=>A.forEach(a=>{if(dom(r,a))pairs.push([r,a])}));
+   const adj=new Map(R.map(r=>[r,[]]));pairs.forEach(([r,a])=>adj.get(r).push(a));
+   const mA=new Map(),mR=new Map();
+   function aug(r,seen){for(const a of adj.get(r)){if(seen.has(a))continue;seen.add(a);if(!mA.has(a)||aug(mA.get(a),seen)){mA.set(a,r);mR.set(r,a);return true}}return false}
+   R.forEach(r=>aug(r,new Set()));
+   const visR=new Set(),visA=new Set(),q=R.filter(r=>!mR.has(r));q.forEach(r=>visR.add(r));
+   while(q.length){const r=q.shift();for(const a of adj.get(r)){if(visA.has(a)||mR.get(r)===a)continue;visA.add(a);const r2=mA.get(a);if(r2&&!visR.has(r2)){visR.add(r2);q.push(r2)}}}
+   return {pairs,nu:mR.size,cover:new Set([...R.filter(r=>!visR.has(r)),...A.filter(a=>visA.has(a))])}}
+ let res;
+ function draw(){svg.innerHTML='';res=analyze(state);const ink2=css('--ink2');
+   for(let li=0;li<nL;li+=1)txt(svg,X(li)+sz/2,oy+nG*sz+18,'$'+(5+li*2),{'text-anchor':'middle',fill:css('--muted'),'font-size':12});
+   for(let gi=0;gi<nG;gi++)txt(svg,ox-8,Y(gi)+sz/2+4,'$'+(10+gi*4),{'text-anchor':'end',fill:css('--muted'),'font-size':12});
+   txt(svg,ox+nL*sz/2,oy+nG*sz+38,'loss →',{'text-anchor':'middle','font-weight':600,fill:ink2});
+   txt(svg,14,oy+nG*sz/2,'gain →',{'text-anchor':'middle','font-weight':600,fill:ink2,transform:'rotate(-90 14 '+(oy+nG*sz/2)+')'});
+   state.forEach(c=>{const r=el('rect',{x:X(c.li)+3,y:Y(c.gi)+3,width:sz-6,height:sz-6,rx:7,fill:c.acc?css('--accept'):css('--reject'),opacity:c.acc?.92:.6,tabindex:0,role:'button',style:'cursor:pointer','aria-label':'gain '+c.g+' loss '+c.l+(c.acc?' accepted':' rejected')},svg);
+     const tog=()=>{c.acc=!c.acc;draw()};r.addEventListener('click',tog);r.addEventListener('keydown',e=>{if(e.key==='Enter'){e.stopPropagation();tog()}});
+     r.addEventListener('mouseenter',()=>{hover=c;lines()});r.addEventListener('mouseleave',()=>{hover=null;lines()})});
+   const fixed=c=>res.cover.has(c)?!c.acc:c.acc;let d='';
+   for(let li=0;li<nL;li++){let m=nG;for(let gi=0;gi<nG;gi++){const c=state.find(c=>c.gi===gi&&c.li===li);if(fixed(c)){m=gi;break}}const yy=oy+(nG-m)*sz;d+=(li?'L':'M')+X(li)+' '+yy+' L'+(X(li)+sz)+' '+yy+' '}
+   el('path',{d,fill:'none',stroke:css('--ink'),'stroke-width':3,'stroke-linejoin':'round','pointer-events':'none'},svg);
+   res.cover.forEach(c=>el('circle',{cx:X(c.li)+sz/2,cy:Y(c.gi)+sz/2,r:sz/2-4,fill:'none',stroke:css('--viol'),'stroke-width':3.5,'pointer-events':'none'},svg));
+   el('g',{id:'flLines','pointer-events':'none'},svg);lines();
+   document.getElementById('stFlips').textContent=res.pairs.length;document.getElementById('stNu').textContent=res.nu}
+ function lines(){const g=svg.querySelector('#flLines');if(!g)return;g.innerHTML='';
+   res.pairs.filter(([r,a])=>showLines||(hover&&(r===hover||a===hover))).forEach(([r,a])=>el('line',{x1:X(r.li)+sz/2,y1:Y(r.gi)+sz/2,x2:X(a.li)+sz/2,y2:Y(a.gi)+sz/2,stroke:css('--viol'),'stroke-width':showLines&&!hover?1.2:2.2,opacity:.85},g))}
+ state=example();draw();
+ document.getElementById('btnEx').onclick=()=>{state=example();draw()};
+ document.getElementById('btnClean').onclick=()=>{state=consistent();draw()};
+ document.getElementById('btnLapse').onclick=()=>{const c=state[Math.floor(Math.random()*state.length)];c.acc=!c.acc;draw()};
+ const bl=document.getElementById('btnLines');bl.onclick=()=>{showLines=!showLines;bl.setAttribute('aria-pressed',showLines);lines()};
+ const img=document.getElementById('paperFig');
+ const figs={b:['figs/fig_boundary.png','Paper figure: decision boundaries for a consistent and an inconsistent NARPS participant'],f:['figs/fig_flipdemo.png','Paper figure: one lapse creates nine naive flip pairs but only one matched pair']};
+ document.querySelectorAll('[data-fig]').forEach(b=>b.onclick=()=>{const f=figs[b.dataset.fig];img.src=f[0];img.alt=f[1];document.querySelectorAll('[data-fig]').forEach(o=>o.setAttribute('aria-pressed',o===b))});
+ matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
+})();
+
+/* ---------- LCLT trial + mapping ---------- */
+(function(){const svg=document.getElementById('lcltsvg'),map=document.getElementById('mapsvg');let raf=null,t0=null,s;
+ const colors={red:'#C9473F',green:'#2E8A5E',blue:'#2F6FD1'};
+ function pie(p,cx,cy,r){if(p>=.999)return `M${cx-r} ${cy}A${r} ${r} 0 1 1 ${cx+r} ${cy}A${r} ${r} 0 1 1 ${cx-r} ${cy}Z`;if(p<=.001)return '';const a=p*2*Math.PI;return `M${cx} ${cy}L${cx} ${cy-r}A${r} ${r} 0 ${p>.5?1:0} 1 ${cx+r*Math.sin(a)} ${cy-r*Math.cos(a)}Z`}
+ function scene(){svg.innerHTML='';box(svg,0,0,560,220,'#141A24',null,12);
+   const cx=150,cy=110,r=60;const ring=el('circle',{cx,cy,r:r+10,fill:'none',stroke:colors.green,'stroke-width':8},svg);
+   el('circle',{cx,cy,r,fill:'#3A4456'},svg);const wedge=el('path',{fill:'#E9C46A'},svg);
+   txt(svg,cx,28,'$13 or $0',{'text-anchor':'middle',fill:'#F1F4F8','font-size':17,'font-weight':600});
+   const pt=txt(svg,cx,206,'50% win',{'text-anchor':'middle',fill:'#C9D2DE','font-size':15});
+   txt(svg,280,116,'or',{'text-anchor':'middle',fill:'#5D6878','font-size':18,'font-weight':600});
+   box(svg,345,62,150,96,'#263042',null,10);txt(svg,420,117,'$7 sure',{'text-anchor':'middle',fill:'#F1F4F8','font-size':22,'font-weight':600});
+   const blks=[['wide','red'],['narrow','green'],['skewed','blue']].map(([d,c],i)=>{const b=box(svg,i*186+2,238,182,40,colors[c],null,8);txt(svg,i*186+93,263,'20 trials · '+d,{'text-anchor':'middle',fill:'#FFFFFF','font-size':14,'font-weight':600});return b});
+   txt(svg,0,296,'Ring color = probability distribution of that block',{fill:css('--muted'),'font-size':12});
+   return {wedge,ring,pt,blks,cx,cy,r}}
+ function drawMap(animate){map.innerHTML='';const ink=css('--ink'),ink2=css('--ink2'),mut=css('--muted');
+   txt(map,0,18,'NARPS: two dimensions',{fill:ink,'font-size':15,'font-weight':700});
+   const gx=0,gy=30,c=26;for(let i=0;i<4;i++)for(let j=0;j<4;j++){const acc=(3-i)-j>=0;box(map,gx+j*c,gy+i*c,c-3,c-3,acc?css('--accept'):css('--reject'),null,4).setAttribute('opacity',acc?.9:.55)}
+   arrow(map,gx+118,gy+100,gx+118,gy+8,ink2);txt(map,gx+128,gy+40,'more gain',{fill:ink2});arrow(map,gx+108,gy+118,gx+12,gy+118,ink2);txt(map,gx+20,gy+138,'less loss',{fill:ink2});
+   txt(map,250,60,'dominates if both',{fill:mut});txt(map,250,80,'improve together',{fill:mut});
+   txt(map,0,200,'Lottery task: one dimension',{fill:ink,'font-size':15,'font-weight':700});
+   const x=p=>20+p*520;el('line',{x1:20,y1:262,x2:540,y2:262,stroke:css('--line'),'stroke-width':3},map);
+   [0,.5,1].forEach(p=>txt(map,x(p),292,Math.round(p*100)+'%',{'text-anchor':'middle',fill:mut}));
+   txt(map,280,318,'higher win probability always dominates',{'text-anchor':'middle',fill:ink2});
+   const pts=[[.1,0],[.2,0],[.3,1],[.4,0],[.5,1],[.6,0],[.7,1],[.8,1],[.9,1]];
+   const arc=el('path',{d:`M${x(.3)} 248 Q ${(x(.3)+x(.6))/2} 206 ${x(.6)} 248`,fill:'none',stroke:css('--viol'),'stroke-width':3},map);
+   txt(map,(x(.3)+x(.6))/2,222,'flip',{'text-anchor':'middle',fill:css('--viol'),'font-weight':700,'font-size':14});
+   pts.forEach(([p,a])=>el('circle',{cx:x(p),cy:262,r:10,fill:a?css('--accept'):css('--reject'),stroke:css('--stage'),'stroke-width':2},map));
+   if(animate&&!reduce)drawIn([arc],.3)}
+ function tick(ts){if(t0===null)t0=ts;const T=(ts-t0)/1000;const blk=Math.floor(T/4)%3;const cols=['red','green','blue'];const dist=[[.05,.95,.1,.9,0,1],[.4,.5,.6,.45,.55,.5],[.6,.7,.8,.75,.65,.7]];
+   const seq=dist[blk];const p=seq[Math.floor(((T%4)/4)*seq.length)%seq.length];
+   s.wedge.setAttribute('d',pie(p,s.cx,s.cy,s.r));s.ring.setAttribute('stroke',colors[cols[blk]]);s.pt.textContent=Math.round(p*100)+'% win';
+   s.blks.forEach((b,i)=>b.setAttribute('opacity',i===blk?1:.35));raf=requestAnimationFrame(tick)}
+ s=scene();s.wedge.setAttribute('d',pie(.5,s.cx,s.cy,s.r));drawMap(false);
+ stops.push(()=>cancelAnimationFrame(raf));
+ hooks[5]=()=>{t0=null;s=scene();s.wedge.setAttribute('d',pie(.5,s.cx,s.cy,s.r));drawMap(true);if(!reduce)raf=requestAnimationFrame(tick)};
+})();
+
+/* ---------- quick-check chart ---------- */
+(function(){const svg=document.getElementById('qc'),tip=document.getElementById('qcTip');
+ const X=['1–4','5–8','9–12','13–16','17–20'];
+ const panels=[{name:'In person',n:'n = 46',b1:[.154,.128,.079,.067,.043],se:[.031,.027,.021,.023,.017],later:[.068,.052,.087,.056,.054],ratio:'2.3×'},
+               {name:'Online',n:'n = 287',b1:[.094,.081,.080,.061,.070],se:[.011,.010,.009,.008,.009],later:[.057,.049,.055,.054,.047],ratio:'1.6×'}];
+ function draw(animate){svg.innerHTML='';const T=46,H=290,PW=270,ymax=.20;const defs=el('defs',{},svg);const lines=[],fades=[];
+  txt(svg,14,T+H/2,'choices that contradict own boundary',{'text-anchor':'middle',fill:css('--ink2'),'font-size':12,'font-weight':600,transform:'rotate(-90 14 '+(T+H/2)+')'});
+  txt(svg,370,T+H+46,'Trial position within a 20-trial color block',{'text-anchor':'middle',fill:css('--ink2'),'font-size':13,'font-weight':600});
+  panels.forEach((P,pi)=>{const L=66+pi*340;const x=i=>L+12+i*(PW-24)/4,y=v=>T+H-(v/ymax)*H;
+   txt(svg,L,20,P.name,{fill:css('--ink'),'font-size':17,'font-weight':700});txt(svg,L+PW,20,P.n,{'text-anchor':'end',fill:css('--muted'),'font-size':12});
+   [0,.05,.10,.15,.20].forEach(v=>{el('line',{x1:L,x2:L+PW,y1:y(v),y2:y(v),stroke:css('--line'),'stroke-width':1},svg);txt(svg,L-6,y(v)+4,Math.round(v*100)+'%',{'text-anchor':'end',fill:css('--muted'),'font-size':12})});
+   X.forEach((s,i)=>txt(svg,x(i),T+H+20,s,{'text-anchor':'middle',fill:css('--muted'),'font-size':12}));
+   const pb=P.b1.map((v,i)=>[x(i),y(v)]),pl=P.later.map((v,i)=>[x(i),y(v)]);
+   const cp=el('clipPath',{id:'qcclip'+pi},defs);el('path',{d:'M'+pl.map(q=>q.join(' ')).join(' L')+` L${x(4)} ${T} L${x(0)} ${T} Z`},cp);
+   const wedge=el('path',{d:'M'+pb.map(q=>q.join(' ')).join(' L')+` L${x(4)} ${T+H} L${x(0)} ${T+H} Z`,fill:css('--viol'),opacity:.28,'clip-path':'url(#qcclip'+pi+')'},svg);fades.push(wedge);
+   const ll=el('path',{d:'M'+pl.map(q=>q.join(' ')).join(' L'),fill:'none',stroke:css('--accept'),'stroke-width':2.5,'stroke-linejoin':'round'},svg);
+   P.b1.forEach((v,i)=>el('line',{x1:x(i),x2:x(i),y1:y(v+P.se[i]),y2:y(Math.max(0,v-P.se[i])),stroke:css('--viol'),'stroke-width':1.5,opacity:.6},svg));
+   const lb=el('path',{d:'M'+pb.map(q=>q.join(' ')).join(' L'),fill:'none',stroke:css('--viol'),'stroke-width':4,'stroke-linejoin':'round','stroke-linecap':'round'},svg);lines.push(ll,lb);
+   [['later','Blocks 2–3',pl,css('--accept'),4.5],['b1','First block',pb,css('--viol'),6.5]].forEach(([k,nm,pts,col,r])=>pts.forEach((q,i)=>{el('circle',{cx:q[0],cy:q[1],r,fill:col,stroke:css('--stage'),'stroke-width':2},svg);
+     const hit=el('circle',{cx:q[0],cy:q[1],r:14,fill:'transparent',style:'cursor:pointer'},svg);
+     hit.addEventListener('mouseenter',()=>{tip.innerHTML='<b>'+P.name+' · '+nm+'</b><br>trials '+X[i]+': '+(P[k][i]*100).toFixed(1)+'%';tip.style.opacity=1;const k2=svg.getBoundingClientRect().width/700;tip.style.left=Math.min(q[0]*k2+10,svg.getBoundingClientRect().width-180)+'px';tip.style.top=(q[1]*k2-46)+'px'});
+     hit.addEventListener('mouseleave',()=>tip.style.opacity=0)}));
+   txt(svg,x(0)+14,y(P.b1[0]+P.se[0])-2,P.ratio,{fill:css('--ink'),'font-size':22,'font-weight':700,'font-family':"'Schibsted Grotesk', Arial, sans-serif"});
+   txt(svg,x(0)+14+P.ratio.length*13+6,y(P.b1[0]+P.se[0])-3,'the later-block rate',{fill:css('--ink2'),'font-size':12});
+   txt(svg,x(0)+8,y(P.later[0])+24,'blocks 2–3',{fill:css('--ink2'),'font-size':12,'font-weight':600})});
+  if(animate&&!reduce){drawIn(lines,0);fades.forEach(w=>{w.style.opacity=0;w.style.transition='opacity .8s ease 1s';requestAnimationFrame(()=>requestAnimationFrame(()=>w.style.opacity=.28))})}}
+ draw(false);hooks[8]=()=>draw(true);
+})();
+
+/* ---------- stake grid ---------- */
+(function(){const svg=document.getElementById('stakesvg');const env=[{g:[5,1],l:[2.5,.5],name:'Low'},{g:[10,2],l:[5,1],name:'Medium'},{g:[25,5],l:[12.5,2.5],name:'High'}];let k=0;
+ const n=16,sz=22,ox=70,oy=8;const fmt=v=>'$'+(Number.isInteger(v)?v:v.toFixed(2));
+ function draw(){svg.innerHTML='';const E=env[k];
+   for(let gi=0;gi<n;gi++)for(let li=0;li<n;li++){const acc=(E.g[0]+gi*E.g[1])>2*(E.l[0]+li*E.l[1]);
+     el('rect',{x:ox+li*sz+1.5,y:oy+(n-1-gi)*sz+1.5,width:sz-3,height:sz-3,rx:3,fill:acc?css('--accept'):css('--reject'),opacity:acc?.85:.5},svg)}
+   el('line',{x1:ox,y1:oy+n*sz,x2:ox+n*sz,y2:oy,stroke:css('--ink'),'stroke-width':2,'stroke-dasharray':'6 5'},svg);
+   txt(svg,ox+n*sz-4,oy+n*sz/2-8,'gain = 2 × loss',{'text-anchor':'end',fill:css('--ink'),'font-size':13,'font-weight':600});
+   [0,5,10,15].forEach(i=>{const a=txt(svg,ox+i*sz+sz/2,oy+n*sz+18,fmt(E.l[0]+i*E.l[1]),{'text-anchor':'middle',fill:css('--muted'),'font-size':12});
+     const b=txt(svg,ox-8,oy+(n-1-i)*sz+sz/2+4,fmt(E.g[0]+i*E.g[1]),{'text-anchor':'end',fill:css('--muted'),'font-size':12});
+     if(!reduce)[a,b].forEach(t=>{t.style.opacity=0;t.style.transition='opacity .4s';requestAnimationFrame(()=>requestAnimationFrame(()=>t.style.opacity=1))})});
+   txt(svg,ox+n*sz/2,oy+n*sz+40,'loss',{'text-anchor':'middle',fill:css('--ink2'),'font-size':13,'font-weight':600});
+   txt(svg,16,oy+n*sz/2,'gain',{'text-anchor':'middle',fill:css('--ink2'),'font-size':13,'font-weight':600,transform:'rotate(-90 16 '+(oy+n*sz/2)+')'});
+   txt(svg,ox+n*sz+12,oy+24,E.name,{fill:css('--ink'),'font-size':22,'font-weight':700});
+   txt(svg,ox+n*sz+12,oy+48,'up to '+fmt(E.g[0]+15*E.g[1]),{fill:css('--muted'),'font-size':13})}
+ document.querySelectorAll('[data-stake]').forEach(b=>b.onclick=()=>{k=+b.dataset.stake;document.querySelectorAll('[data-stake]').forEach(o=>o.setAttribute('aria-pressed',o===b));draw()});
+ draw();
+})();
+
+/* ---------- design timeline ---------- */
+(function(){const svg=document.getElementById('designsvg');let comp='task';
+ const order=['L','M','H','H','M','L'],lab={L:'Low',M:'Med',H:'High'};
+ const shade=s=>s==='L'?css('--accept-soft'):s==='M'?css('--accept'):css('--ink'),tcol=s=>s==='L'?css('--ink'):css('--stage');
+ function draw(animate){svg.innerHTML='';
+   [0,1].forEach(v=>{const y=v*120+10;txt(svg,0,y+32,'Visit '+(v+1),{fill:css('--ink'),'font-size':18,'font-weight':700});
+     txt(svg,0,y+52,v?'1–3 weeks later':'≤ 60 min scan',{fill:css('--muted'),'font-size':12});
+     order.forEach((s,i)=>{const g=el('g',{},svg);const x=130+i*122;box(g,x,y+6,114,58,shade(s),null,8);
+       txt(g,x+57,y+32,lab[s]+' stakes',{'text-anchor':'middle',fill:tcol(s),'font-size':14,'font-weight':600});
+       txt(g,x+57,y+50,'64 trials',{'text-anchor':'middle',fill:tcol(s),'font-size':12});
+       if(animate&&!reduce){g.style.opacity=0;g.style.transition='opacity .4s ease '+(i*.08+v*.3)+'s';requestAnimationFrame(()=>requestAnimationFrame(()=>g.style.opacity=1))}});
+     const px=130+6*122+8;box(svg,px,y+6,250,58,css('--viol-soft'),null,8);
+     txt(svg,px+125,y+30,'1 accepted gamble played',{'text-anchor':'middle',fill:css('--ink'),'font-size':13,'font-weight':600});
+     txt(svg,px+125,y+48,'for real · $50 bankroll',{'text-anchor':'middle',fill:css('--ink'),'font-size':12});
+     const msg=comp==='task'?(v?'Debrief → equalizing $75 per visit':'Hears only about task payment'):'Hears: $75 fixed + task payment';
+     txt(svg,130,y+88,msg,{fill:comp==='task'?css('--viol'):css('--accent'),'font-size':14,'font-weight':600})});
+   txt(svg,130,254,'Stake order counterbalanced, repeated at Visit 2 · same gambles, new order',{fill:css('--muted'),'font-size':12})}
+ document.querySelectorAll('[data-comp]').forEach(b=>b.onclick=()=>{comp=b.dataset.comp;document.querySelectorAll('[data-comp]').forEach(o=>o.setAttribute('aria-pressed',o===b));draw(false)});
+ draw(false);hooks[11]=()=>draw(true);
+})();
+
+/* ---------- inspiration diagram ---------- */
+(function(){const svg=document.getElementById('inspsvg');
+ const rows=[
+  {obs:'Opening transient + putamen',sub:'early errors, later corrected',hyp:'Learning the environment?',hsub:['confidence-based learning without','feedback (Daniel & Pollmann 2012)'],test:'Range preview + review',tsub:'do people disown opening choices?',col:'--viol'},
+  {obs:'Range adaptation',sub:'Brochard & Daunizeau 2024',hyp:'Range knowledge sets the boundary?',hsub:['each new stake level = a new range'],test:'Range preview × 3 stakes',tsub:'+ repeat exposures, Visit 2',col:'--accent'},
+  {obs:'Trembling hand',sub:'Kurtz-David et al. 2025',hyp:'Flips are motor noise?',hsub:['NARPS has button presses only,','no movement data to test it'],test:'Needs its own test',tsub:'e.g. swap the response hand',col:'--ink'}];
+ function draw(animate){svg.innerHTML='';const cols=[0,378,800],w=[312,376,350];
+   ['NARPS raised','Hypothesis','Test in new study'].forEach((h,i)=>txt(svg,cols[i],18,h.toUpperCase(),{fill:css('--muted'),'font-size':12,'font-weight':700,'letter-spacing':'1.2'}));
+   const ar=[];rows.forEach((r,i)=>{const y=40+i*145;const c=css(r.col);
+     box(svg,cols[0],y,w[0],110,css('--surface'),css('--line'));el('rect',{x:cols[0],y,width:6,height:110,rx:3,fill:c},svg);
+     txt(svg,cols[0]+22,y+44,r.obs,{fill:css('--ink'),'font-size':18,'font-weight':700});txt(svg,cols[0]+22,y+70,r.sub,{fill:css('--muted'),'font-size':13});
+     box(svg,cols[1],y,w[1],110,css('--surface'),css('--line'));
+     txt(svg,cols[1]+20,y+(r.hsub.length>1?38:44),r.hyp,{fill:css('--ink'),'font-size':16,'font-weight':600});
+     r.hsub.forEach((t,k)=>txt(svg,cols[1]+20,y+(r.hsub.length>1?64:70)+k*18,t,{fill:css('--muted'),'font-size':13}));
+     box(svg,cols[2],y,w[2],110,css('--viol-soft'),null);
+     txt(svg,cols[2]+20,y+48,r.test,{fill:css('--ink'),'font-size':21,'font-weight':700});txt(svg,cols[2]+20,y+74,r.tsub,{fill:css('--ink2'),'font-size':14});
+     ar.push(arrow(svg,cols[0]+w[0]+6,y+55,cols[1]-8,y+55,css('--ink2')),arrow(svg,cols[1]+w[1]+6,y+55,cols[2]-8,y+55,css('--ink2')))});
+   if(animate&&!reduce)drawIn(ar,.1)}
+ draw(false);hooks[12]=()=>draw(true);
+})();
+
+/* ---------- preview timeline ---------- */
+(function(){const svg=document.getElementById('previewsvg');const runs=['L','M','H','H','M','L'],preview={L:true,M:false,H:true};
+ let x=0;const seen={};txt(svg,0,14,'Visit 1, example assignment',{fill:css('--muted'),'font-size':12,'font-weight':600});
+ runs.forEach(s=>{if(!seen[s]){seen[s]=1;const pv=preview[s];box(svg,x,28,62,50,pv?css('--viol-soft'):css('--surface'),pv?css('--viol'):css('--line'),6);
+   txt(svg,x+31,50,pv?'preview':'standard',{'text-anchor':'middle',fill:css('--ink'),'font-size':11,'font-weight':600});txt(svg,x+31,66,pv?'+ quiz':'prep',{'text-anchor':'middle',fill:css('--ink2'),'font-size':11});x+=66}
+   box(svg,x,28,46,50,s==='L'?css('--accept-soft'):s==='M'?css('--accept'):css('--ink'),null,6);
+   txt(svg,x+23,58,s,{'text-anchor':'middle',fill:s==='L'?css('--ink'):css('--stage'),'font-size':16,'font-weight':700});x+=50});
+ txt(svg,0,104,'Assignment kept at Visit 2, so persistence is testable.',{fill:css('--muted'),'font-size':12});
+})();
+
+/* ---------- end-of-task review animation ---------- */
+(function(){const scr=document.getElementById('reviewScreen');let t=null;
+ const items=[['run 1 · trial 3','+$22 / −$14','weakly accept','weakly reject',true],['run 1 · trial 9','+$16 / −$10','weakly accept','weakly reject',true],['run 2 · trial 40','+$30 / −$9','strongly accept',null,false],['run 4 · trial 51','+$18 / −$12','weakly reject',null,false]];
+ function render(shown,changed){scr.innerHTML='<div style="font:600 14px/1.3 var(--f-text);color:#AAB4C3;letter-spacing:.06em;text-transform:uppercase">Review your earlier answers</div>'+items.slice(0,shown).map((it,i)=>{const ch=it[4]&&i<changed;
+   return '<div style="display:flex;align-items:center;gap:12px;background:#1E2635;border-radius:8px;padding:9px 12px;font:500 14px/1.2 var(--f-text)"><span style="color:#8C97AA;width:120px">'+it[0]+'</span><span style="font-family:var(--f-mono);color:#F1F4F8;width:120px">'+it[1]+'</span><span style="flex:1;color:'+(ch?'#8C97AA':'#C9D2DE')+';text-decoration:'+(ch?'line-through':'none')+'">'+it[2]+'</span>'+(ch?'<span style="background:#F29A4A;color:#141A24;padding:5px 8px;border-radius:5px;font-weight:600">→ '+it[3]+'</span>':'<span style="color:#6FA2F2;font-weight:600">keep</span>')+'</div>'}).join('')}
+ function run(){if(reduce){render(items.length,2);return}let shown=0,changed=0;
+   const step=()=>{if(shown<items.length){shown++;render(shown,0);t=setTimeout(step,500)}else if(changed<2){changed++;render(shown,changed);t=setTimeout(step,900)}else t=setTimeout(run,2600)};
+   t=setTimeout(step,300)}
+ render(items.length,2);stops.push(()=>clearTimeout(t));hooks[13]=run;
+})();
+
+/* ---------- prediction schematics ---------- */
+(function(){const a=document.getElementById('predsvg'),b=document.getElementById('revsvg');
+ function axes(svg,xl,yl){const L=50,T=14,W=490,H=262;el('line',{x1:L,y1:T+H,x2:L+W,y2:T+H,stroke:css('--line'),'stroke-width':1.5},svg);el('line',{x1:L,y1:T,x2:L,y2:T+H,stroke:css('--line'),'stroke-width':1.5},svg);
+   txt(svg,L+W/2,T+H+38,xl,{'text-anchor':'middle',fill:css('--ink2'),'font-weight':600});txt(svg,16,T+H/2,yl,{'text-anchor':'middle',fill:css('--ink2'),'font-weight':600,transform:'rotate(-90 16 '+(T+H/2)+')'});return {L,T,W,H}}
+ function draw(animate){a.innerHTML='';b.innerHTML='';
+   let g=axes(a,'trials since first exposure →','inconsistency');
+   const curve=(amp,tau)=>{let d='';for(let i=0;i<=100;i++){const t=i/100,v=.15+amp*Math.exp(-t*6/tau);d+=(i?'L':'M')+(g.L+t*g.W)+' '+(g.T+g.H-v*g.H)}return d};
+   const p1=el('path',{d:curve(.65,1),fill:'none',stroke:css('--reject'),'stroke-width':4},a),p2=el('path',{d:curve(.3,.45),fill:'none',stroke:css('--viol'),'stroke-width':4},a);
+   txt(a,g.L+120,g.T+40,'standard prep',{fill:css('--ink2'),'font-weight':600,'font-size':14});txt(a,g.L+70,g.T+g.H-110,'range preview',{fill:css('--viol'),'font-weight':700,'font-size':14});
+   g=axes(b,'when the original choice was made →','share changed at review');
+   const bars=[.28,.16,.09,.07,.06,.06];const bw=g.W/bars.length;const rects=[];
+   bars.forEach((v,i)=>{const h=v/.32*g.H;const y=g.T+g.H-h;const r=el('rect',{x:g.L+i*bw+10,y,width:bw-20,height:h,rx:4,fill:i<2?css('--viol'):css('--reject')},b);rects.push([r,h,y]);
+     txt(b,g.L+i*bw+bw/2,g.T+g.H+16,['run 1 early','run 1 late','run 2','run 3','run 4','run 5–6'][i],{'text-anchor':'middle',fill:css('--muted'),'font-size':11})});
+   if(animate&&!reduce){drawIn([p1,p2],0);rects.forEach(([r,h,y],i)=>{r.setAttribute('height',0);r.setAttribute('y',y+h);setTimeout(()=>{r.style.transition='all .6s ease';r.setAttribute('height',h);r.setAttribute('y',y)},60+i*80)})}}
+ draw(false);hooks[14]=()=>draw(true);
+})();
+
+go(fromHash());
+})();
+</script>
+
+</body>
+</html>
