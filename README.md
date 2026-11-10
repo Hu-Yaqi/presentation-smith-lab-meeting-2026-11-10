@@ -9,4 +9,6 @@ Contents: MA project (how LLMs recognize and use people's uncertainty), the NARP
 choice-inconsistency method and results, a first look at the Linked Colored Lottery Task data,
 the lab's new stake-magnitude replication, and my proposed additions.
 
-Private: includes unpublished figures, study-design details and preliminary results.
+View online: https://hu-yaqi.github.io/presentation-smith-lab-meeting-2026-11-10/
+
+Note: includes unpublished figures, study-design details and preliminary results.
